@@ -1,9 +1,20 @@
 from twilio.rest import Client
-from credentials import account_sid, auth_token, my_cell, my_twilio
+from weatherdata import weather
 
-client = TwilioRestClient('ACdf3fe78024277d62b37d232d6c420592', '125903a4cc62889e863b0f775caed4d7')
+class main():
+   
+    def weatherString(self):
+        my_message = weather()
+        
+    def send_sms(self):
+        x = weather()
+        x.getWeather()
+        y = str(x)
+        account_sid = 'AC1061e132398b5dc01334d9ff9b63d58a'
+        auth_token = '9e6a04f6a51ef7d32858ac16f83c2727'
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(to="+19163379294", from_="8459996189",
+                                        body=y)
 
-my_msg = "Your message goes here..."
-
-message = client.messages.create(to="+19163379294", from_="5303631182",
-                                     body=my_msg)
+x = main()
+x.send_sms()
