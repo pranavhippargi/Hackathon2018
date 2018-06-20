@@ -11,8 +11,14 @@ class weather():
         url = api_key + city
         data = requests.get(url).json()
         formatted_data = data['main']['temp']
-        message = "It is " + str(formatted_data) + " today"
-        print(str(formatted_data) + " Kelvin")
+        return formatted_data
+        
+        
+        
+    def sendText(self):  
+        y = weather()
+        message = "It is " + str(y.getWeather()) + " today"
+        print(str(y) + " Kelvin")
         account_sid = 'AC1061e132398b5dc01334d9ff9b63d58a'
         auth_token = '9e6a04f6a51ef7d32858ac16f83c2727'
         client = Client(account_sid, auth_token)
@@ -20,7 +26,8 @@ class weather():
                                         body=message)
 
 x = weather()
-x.getWeather() 
+# x.getWeather()
+x.sendText()
 
 
 
