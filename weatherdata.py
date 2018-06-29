@@ -37,9 +37,9 @@ class Weather():
         #Test
         weather_kelvin = data['main']['temp']
         weather_celcius = weather_kelvin - 237.15
+        print(weather_kelvin)
         return ("%.2f" % weather_celcius)
 
 
-print("hello world")
-        
+    
     

@@ -25,6 +25,12 @@ class Main(Weather):
         message = client.messages.create(to="+19163379294", from_="8459996189",
                                         body=messageText)
 
+        return(self.message.body)
+    #Get Message Body and send to Microsoft Translator
+    def sendTextBodyToMSFTTranslate(self):
+        print(message.body)
+        
+
 # OFF WE GO! 
 x= Main()
 x.send_sms()
