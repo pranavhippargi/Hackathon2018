@@ -1,15 +1,33 @@
-# FarmersTwilio
-A way to inform farmers about weather using Twilio's SMS service
+## Use Azure app service editor
 
-Currently, the project has a few components. 
+1. make code change in the online editor
+2. open the console window and run
 
-1) Send the SMS -> send_sms.py
-2) Collect the weather data with REST API -> weatherData.py
+```
+build.cmd
+```
+
+## Use Visual Studio 
+
+### Build and debug
+1. download source code zip and extract source in local folder
+2. open {PROJ_NAME}.sln in Visual Studio
+3. build and run the bot
+4. download and run [botframework-emulator](https://emulator.botframework.com/)
+5. connect the emulator to http://localhost:3987
+
+### Publish back
+
+In Visual Studio, right click on {PROJ_NAME} and select 'Publish'
+
+For first time publish after downloading source code
+1. In the publish profiles tab, click 'Import'
+2. Browse to 'PostDeployScripts' and pick '{SITE_NAME}.publishSettings'
 
 
-Next:
+## Use continuous integration
 
-3) I want to explore a way to create a ML framework that will read the weather data then determine if changes occur in the    weather such as higher likelyhood of rain or not rain. This would make an automated call to the weather api for x region by the minute and then determine if the changes are drastic enough to inform the farmer via text message. 
-4) I want a way so farmers can sign up via text message. {e.g.: "Text 9134323444 to sign up." }
-5) A way to determine crop yields. 
-# Hackathon2018
+If you have setup continuous integration, then your bot will automatically deployed when new changes are pushed to the source repository.
+
+
+

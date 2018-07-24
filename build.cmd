@@ -11,3 +11,4 @@ if exist ..\wwwroot\deploy.cmd (
 )
 
 endlocal
+
