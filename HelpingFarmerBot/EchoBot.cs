@@ -51,19 +51,6 @@ namespace HelpingFarmerBot
                             await context.SendActivity("Hello and welcome to the echo bot.");
                             await context.SendActivity("Hello, you are choosing to use the Microsoft Translator API Bot.");
                         }
-
-
-                        var activity = MessageFactory.SuggestedActions(
-                        new CardAction[]
-                        {
-                            new CardAction(title: "Crop Price", type: ActionTypes.ImBack, value: "Crop Price"),
-                            new CardAction( title: "green", type: ActionTypes.ImBack, value: "green"),
-                            new CardAction(title: "blue", type: ActionTypes.ImBack, value: "blue")
-                        }, text: "Choose a color");
-
-                        // Send the activity as a reply to the user.
-                        await context.SendActivity(activity);
-
                     }
                     break;
             }
