@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace HelpFarmerViaSMS
 {
@@ -13,7 +14,7 @@ namespace HelpFarmerViaSMS
 
     public enum Crop
     {
-        Corn, Cocoa, Wheat, Oats, Rough Rice, Soybean, SoybeanMeal, SoybeanOil, Canola
+        Corn = 0, Cocoa, Wheat, Oats, Rough Rice, Soybean, SoybeanMeal, SoybeanOil, Canola
     }
 
     public static class CropExtensions
