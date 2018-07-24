@@ -20,51 +20,55 @@ namespace HelpingFarmerBot
         /// for processing this conversation turn. </param>        
         public async Task OnTurn(ITurnContext context)
         {
-            //// This bot is only handling Messages
-            //if (context.Activity.Type == ActivityTypes.Message)
-            //{
-            //    //// Get the conversation state from the turn context
-            //    //var state = context.GetConversationState<EchoState>();
-
-            //    //// Bump the turn count. 
-            //    //state.TurnCount++;
-
-            //    //// Echo back to the user whatever they typed.
-            //    //await context.SendActivity($"Turn {state.TurnCount}: TanuK sent '{context.Activity.Text}'");
-
-
-            //}
-
-
             switch (context.Activity.Type)
             {
                 case ActivityTypes.Message:
-                    var message = context.Activity.Text.Trim().ToLower();
-
-                    // echo back the user's input.
-                    
-                    
-                    CropInfoReader infoReader = new CropInfoReader();
-
-                    var crop = (Crop)Int32.Parse(message);
-                    CropInfo info = infoReader.GetCropInfo(crop);
-                    var logMessage = $"{info.name} low price: {info.lowPrice} avg price: {info.avgPrice} high price: {info.highPrice}";
-                    await context.SendActivity(logMessage);
+                    var messagetext = context.Activity.Text.Trim().ToLower();
+                    if (messagetext.Contains("price"))
+                    {
+                        var message = GetPrice(messagetext);
+                        await context.SendActivity(message);
+                    }
+                    else if(messagetext.Contains("weather"))
+                    {
+                        await context.SendActivity($"Tomorrow weather in London is rainy.");
+                    }
+                    else
+                    {
+                        await context.SendActivity($"Welcome to Farmocratize. \nDiscover global crop prices and local weather forecasts. Try following options. \n Price: 'Crop' \n Weather: 'City'");
+                    }
                     break;
-
-
-
                 case ActivityTypes.ConversationUpdate:
                     foreach (var newMember in context.Activity.MembersAdded)
                     {
                         if (newMember.Id != context.Activity.Recipient.Id)
                         {
                             await context.SendActivity("Hello and welcome to the echo bot.");
-                            await context.SendActivity("Hello, you are choosing to use the Microsoft Translator API Bot.");
                         }
                     }
                     break;
             }
+
+        }
+
+        private string GetPrice(string messagetext)
+        {
+            var defaultMessage = "Commodity price not found. Try - Price: 'Wheat'.";
+            if (string.IsNullOrEmpty(messagetext))
+            {
+                return defaultMessage;
+            }
+
+            var list = messagetext.Split(":");
+            var produce = list[1].Replace("[","").Replace("]","").Trim();
+
+            CropInfoReader infoReader = new CropInfoReader();
+
+            var crop = (Crop)Int32.Parse("1");
+            CropInfo info = infoReader.GetCropInfo(crop);
+            var logMessage = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
+
+            return logMessage;
 
         }
     }
