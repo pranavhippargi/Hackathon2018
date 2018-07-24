@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
+using SimpleEchoBot.FarmingInfo;
 
 namespace HelpingFarmerBot
 {
@@ -37,11 +39,20 @@ namespace HelpingFarmerBot
             switch (context.Activity.Type)
             {
                 case ActivityTypes.Message:
-                    var messagetext = context.Activity.Text.Trim().ToLower();
+                    var message = context.Activity.Text.Trim().ToLower();
 
                     // echo back the user's input.
-                    await context.SendActivity($"You sent '{context.Activity.Text}'");
+                    
+                    
+                    CropInfoReader infoReader = new CropInfoReader();
+
+                    var crop = (Crop)Int32.Parse(message);
+                    CropInfo info = infoReader.GetCropInfo(crop);
+                    var logMessage = $"{info.name} low price: {info.lowPrice} avg price: {info.avgPrice} high price: {info.highPrice}";
+                    await context.SendActivity(logMessage);
                     break;
+
+
 
                 case ActivityTypes.ConversationUpdate:
                     foreach (var newMember in context.Activity.MembersAdded)
