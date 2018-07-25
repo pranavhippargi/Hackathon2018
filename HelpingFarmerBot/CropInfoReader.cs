@@ -6,6 +6,8 @@ using System.Web;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using HtmlAgilityPack;
+using System.Net;
 
 namespace SimpleEchoBot.FarmingInfo
 {
@@ -13,16 +15,53 @@ namespace SimpleEchoBot.FarmingInfo
     {
        
         private static string CropPricesJson = Path.Combine(Environment.CurrentDirectory, @"Data\", "output.json");
+        private static string CountryCurrencyIdJson = Path.Combine(Environment.CurrentDirectory, @"Data\", "countries.json");
 
         private Dictionary<string, CropInfo> crops = null;
+        private Dictionary<string, string> currencyIds = null;
         public CropInfoReader()
         {
             populateCropObjects(CropPricesJson);
+            saveCurrencyConversion();
         }
 
-        public CropInfo GetCropInfo(Crop crop)
+        public CropInfo GetCropInfo(Crop crop, string country)
         {
-            return crops[crop.toString()];
+            var countryId = currencyIds[country.ToLower()];
+            var key = $"USD_{countryId}";
+            string conversionUrl = $"http://free.currencyconverterapi.com/api/v5/convert?q={key}&compact=y";
+
+            float conversion = 1f;
+            using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString(conversionUrl);
+                var jobj = JObject.Parse(json);
+                conversion = float.Parse(jobj[key]["val"].ToString());
+            }
+            var convertedCrop = crops[crop.toString()];
+            convertedCrop.avgPrice = convertedCrop.avgPrice * conversion;
+            convertedCrop.lowPrice = convertedCrop.lowPrice * conversion;
+            convertedCrop.highPrice = convertedCrop.highPrice * conversion;
+            return convertedCrop;  
+        }
+
+        private void saveCurrencyConversion()
+        {
+            currencyIds = new Dictionary<string, string>();
+            using (StreamReader reader = File.OpenText(CountryCurrencyIdJson))
+            {
+                JObject jobj = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                var results = jobj["results"];
+                foreach (var countries in jobj)
+                {
+                    foreach (var country in countries.Value)
+                    {
+                        var info = country.First;
+                        currencyIds.Add(info["id"].ToString().ToLower(), info["currencyId"].ToString());
+                    }
+                }
+            }
+            GetCropInfo(Crop.Canola, "AU");
         }
 
         private void populateCropObjects(string filePath)

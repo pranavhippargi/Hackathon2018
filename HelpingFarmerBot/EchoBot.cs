@@ -40,16 +40,8 @@ namespace HelpingFarmerBot
             {
                 case ActivityTypes.Message:
                     var message = context.Activity.Text.Trim().ToLower();
-
-                    // echo back the user's input.
-                    
-                    
-                    CropInfoReader infoReader = new CropInfoReader();
-
-                    var crop = (Crop)Int32.Parse(message);
-                    CropInfo info = infoReader.GetCropInfo(crop);
-                    var logMessage = $"{info.name} low price: {info.lowPrice} avg price: {info.avgPrice} high price: {info.highPrice}";
-                    await context.SendActivity(logMessage);
+                    var reply = GetCropMessage(message);
+                    await context.SendActivity(reply);
                     break;
 
 
@@ -66,6 +58,15 @@ namespace HelpingFarmerBot
                     break;
             }
 
+        }
+
+        private string GetCropMessage(string input)
+        {
+            CropInfoReader infoReader = new CropInfoReader();
+
+            var crop = (Crop)Int32.Parse(input);
+            CropInfo info = infoReader.GetCropInfo(crop, "");
+            return $"{info.name} low price: {info.lowPrice} avg price: {info.avgPrice} high price: {info.highPrice}";
         }
     }
 }
