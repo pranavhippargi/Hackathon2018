@@ -10,6 +10,8 @@ namespace HelpingFarmerBot
     public class HelpingFarmerBot : IBot
     {
         private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and local weather forecasts. Try following options. \n Price: 'Crop' \n Weather: 'City'";
+        CropInfoReader infoReader = new CropInfoReader();
+
         /// <summary>
         /// Every Conversation turn for our HelpingFarmerBot will call this method. In here
         /// the bot checks the Activty type to verify it's a message, bumps the 
@@ -24,6 +26,9 @@ namespace HelpingFarmerBot
             {
                 case ActivityTypes.Message:
                     var messagetext = context.Activity.Text.Trim().ToLower();
+                    var country = context.Activity.From.Id;
+                    await context.SendActivity(country);
+
                     if (messagetext.Contains("price"))
                     {
                         var message = GetPrice(messagetext);
@@ -60,15 +65,11 @@ namespace HelpingFarmerBot
             }
 
             var list = messagetext.Split(":");
-            var produce = list[1].Replace("[","").Replace("]","").Trim();
+            var cropName = list[1].Replace("[","").Replace("]","").Trim();
+            CropInfo info = infoReader.GetCropInfo(cropName, "");
+            var reply = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
 
-            CropInfoReader infoReader = new CropInfoReader();
-
-            var crop = (Crop)Int32.Parse("1");
-            CropInfo info = infoReader.GetCropInfo(crop, "");
-            var logMessage = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
-
-            return logMessage;
+            return reply;
 
         }
     }

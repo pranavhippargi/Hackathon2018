@@ -24,20 +24,25 @@ namespace HelpingFarmerBot
             saveCurrencyConversion();
         }
 
-        public CropInfo GetCropInfo(Crop crop, string country)
+        public CropInfo GetCropInfo(string crop, string countryId)
         {
-            var countryId = currencyIds[country.ToLower()];
-            var key = $"USD_{countryId}";
-            string conversionUrl = $"http://free.currencyconverterapi.com/api/v5/convert?q={key}&compact=y";
-
             float conversion = 1f;
-            using (WebClient wc = new WebClient())
+
+            if (!string.IsNullOrEmpty(countryId))
             {
-                var json = wc.DownloadString(conversionUrl);
-                var jobj = JObject.Parse(json);
-                conversion = float.Parse(jobj[key]["val"].ToString());
+                var currencyId = currencyIds[countryId];
+                var key = $"USD_{currencyId}";
+                string conversionUrl = $"http://free.currencyconverterapi.com/api/v5/convert?q={key}&compact=y";
+
+                using (WebClient wc = new WebClient())
+                {
+                    var json = wc.DownloadString(conversionUrl);
+                    var jobj = JObject.Parse(json);
+                    conversion = float.Parse(jobj[key]["val"].ToString());
+                }
             }
-            var convertedCrop = crops[crop.toString()];
+            
+            var convertedCrop = crops[crop.ToLower()];
             convertedCrop.avgPrice = convertedCrop.avgPrice * conversion;
             convertedCrop.lowPrice = convertedCrop.lowPrice * conversion;
             convertedCrop.highPrice = convertedCrop.highPrice * conversion;
@@ -56,11 +61,10 @@ namespace HelpingFarmerBot
                     foreach (var country in countries.Value)
                     {
                         var info = country.First;
-                        currencyIds.Add(info["id"].ToString().ToLower(), info["currencyId"].ToString());
+                        currencyIds.Add(info["id"].ToString(), info["currencyId"].ToString());
                     }
                 }
             }
-            GetCropInfo(Crop.Canola, "AU");
         }
 
         private void populateCropObjects(string filePath)
@@ -84,7 +88,7 @@ namespace HelpingFarmerBot
                                 crop.lowPrice = float.Parse(item["lowPrice"].ToString());
                                 crop.highPrice = float.Parse(item["highPrice"].ToString());
                                 crop.date = DateTime.Parse(item["priceDate"].ToString());
-                                crops.Add(crop.name, crop);
+                                crops.Add(crop.name.ToLower(), crop);
                             }
                             
                         }
