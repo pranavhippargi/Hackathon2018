@@ -57,7 +57,10 @@ namespace HelpingFarmerBot
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e.StackTrace);
+                            await context.SendActivity($"Weather data for {city.ToUpperInvariant()} is unavailable.");
+
+                            // TODO: decide when API throws exception; what kind of logging we want to do.
+                            //Console.WriteLine(e.StackTrace);
                         }
                     }
                     else if (messagetext.Contains("price"))
