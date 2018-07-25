@@ -8,9 +8,6 @@ using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
 using SimpleEchoBot.FarmingInfo;
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-
 namespace HelpingFarmerBot
 {
     public class EchoBot : IBot
@@ -48,22 +45,6 @@ namespace HelpingFarmerBot
 
                     // echo back the user's input.
                     
-                    if (message.ToLowerInvariant().Contains("weather"))
-                    {
-                        try
-                        {
-                            var apiKey = "d0350e61d7e88eac4874c96c578cb95b";
-                            var newUrl = $"http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID={apiKey}";
-
-                            var weatherJsonMsg = this.HttpGet(newUrl);
-                            var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.StackTrace);
-                        }
-                    }
-                    
                     CropInfoReader infoReader = new CropInfoReader();
 
                     var crop = (Crop)Int32.Parse(message);
@@ -86,24 +67,6 @@ namespace HelpingFarmerBot
                     break;
             }
 
-        }
-
-        public string HttpGet(string URI)
-        {
-            WebClient client = new WebClient();
-
-            // Add a user agent header in case the 
-            // requested URI contains a query.
-
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-
-            Stream data = client.OpenRead(URI);
-            StreamReader reader = new StreamReader(data);
-            string s = reader.ReadToEnd();
-            data.Close();
-            reader.Close();
-
-            return s;
         }
     }
 }
