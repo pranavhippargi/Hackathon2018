@@ -55,8 +55,7 @@ namespace HelpingFarmerBot
                             Console.WriteLine(e.StackTrace);
                         }
                     }
-
-                    if (messagetext.Contains("price"))
+                    else if (messagetext.Contains("price"))
                     {
                         var message = GetPrice(messagetext);
                         await context.SendActivity(message);
