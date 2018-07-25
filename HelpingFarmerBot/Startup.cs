@@ -45,7 +45,7 @@ namespace HelpingFarmerBot
                 options.Middleware.Add(new CatchExceptionMiddleware<Exception>(async (context, exception) =>
                 {
                     await context.TraceActivity("HelpingFarmerBot Exception", exception);
-                    await context.SendActivity("Sorry, it looks like something went wrong!");
+                    await context.SendActivity("Please provide your input in correct format - Price: <Crop Name> OR Weather: <City Name>");
                 }));
 
                 // The Memory Storage used here is for local bot debugging only. When the bot
