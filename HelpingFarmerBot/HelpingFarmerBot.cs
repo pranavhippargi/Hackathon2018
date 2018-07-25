@@ -39,29 +39,8 @@ namespace HelpingFarmerBot
 
                     if (messagetext.ToLowerInvariant().Contains("weather"))
                     {
-                        var city = messagetext.Split(':')[1].Trim();
-
-                        try
-                        {
-                            var apiKey = "c38e770a1da2d9c102a1e4a5ae98f0d1";
-                            var newUrl = $"http://api.openweathermap.org/data/2.5/weather?appid={apiKey}&q={city}";
-
-                            var weatherJsonMsg = this.HttpGet(newUrl);
-                            var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
-
-                            var temperature = ConvertKelvinToCelcius(weatherData.Main["temp"]);
-                            var minTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_min"]);
-                            var maxTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_max"]);
-
-                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {temperature} C ; Min Temp: {minTemperature} C; Max Temp: {maxTemperature} C");
-                        }
-                        catch (Exception e)
-                        {
-                            await context.SendActivity($"Weather data for {city.ToUpperInvariant()} is unavailable.");
-
-                            // TODO: decide when API throws exception; what kind of logging we want to do.
-                            //Console.WriteLine(e.StackTrace);
-                        }
+                        WeatherInfoReader weatherRead = new WeatherInfoReader();
+                        await context.SendActivity(weatherRead.getweather(messagetext));
                     }
                     else if (messagetext.Contains("price"))
                     {
