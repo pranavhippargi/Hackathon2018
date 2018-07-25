@@ -46,7 +46,7 @@ namespace HelpingFarmerBot
 
                             var temperature = weatherData.Main["temp"];
 
-                            await context.SendActivity($"Temp:{temperature}");
+                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {ConvertKelvinToCelcius(temperature)} C.");
                         }
                         catch (Exception e)
                         {
@@ -75,6 +75,12 @@ namespace HelpingFarmerBot
                     break;
             }
 
+        }
+
+        private string ConvertKelvinToCelcius(string kelvin)
+        {
+            var tempInKelvin = Convert.ToDouble(kelvin);
+            return (tempInKelvin - 273.15).ToString();
         }
 
         private string GetPrice(string messagetext)
