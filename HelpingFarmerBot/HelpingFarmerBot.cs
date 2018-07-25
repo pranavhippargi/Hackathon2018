@@ -18,7 +18,7 @@ namespace HelpingFarmerBot
 {
     public class HelpingFarmerBot : IBot
     {
-        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and local temperature. Try following options. \n Price: 'Crop' \n Weather: 'City'";
+        private static string HelpMessage = $"Welcome to CropCast. \nDiscover global crop prices and local temperature. Try following options. \n Price: 'Crop' \n Weather: 'City'";
         CropInfoReader infoReader = new CropInfoReader();
 
         /// <summary>
