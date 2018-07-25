@@ -25,6 +25,23 @@ namespace HelpingFarmerBot
 
     public static class CropExtensions
     {
+        public static string PrintAllCrops()
+        {
+            string ret = "";
+            var values = Enum.GetValues(typeof(Crop));
+            foreach (Crop crop in values)
+            {
+                if (crop.Equals(values.GetValue(values.Length-1)))
+                {
+                    ret += $"or {CropExtensions.toString(crop)}";
+                }
+                else
+                {
+                    ret += $"{CropExtensions.toString(crop)}, ";
+                }
+            }
+            return ret;
+        }
         public static string toString(this Crop crop)
         {
             switch (crop)

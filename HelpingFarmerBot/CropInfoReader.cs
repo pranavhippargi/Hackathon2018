@@ -50,13 +50,20 @@ namespace HelpingFarmerBot
                 }
                 currency = countryInfo.currencySymbol;
             }
+
+            try
+            {
+                var convertedCrop = crops[crop.ToLower()];
+                convertedCrop.avgPrice = convertedCrop.avgPrice * conversion;
+                convertedCrop.lowPrice = convertedCrop.lowPrice * conversion;
+                convertedCrop.highPrice = convertedCrop.highPrice * conversion;
+                convertedCrop.currencySymbol = currency;
+                return convertedCrop;
+            } catch (Exception e)
+            {
+                throw new Exception($"Prices for {crop.ToUpperInvariant()} not available. Please try {CropExtensions.PrintAllCrops()}.");
+            }
             
-            var convertedCrop = crops[crop.ToLower()];
-            convertedCrop.avgPrice = convertedCrop.avgPrice * conversion;
-            convertedCrop.lowPrice = convertedCrop.lowPrice * conversion;
-            convertedCrop.highPrice = convertedCrop.highPrice * conversion;
-            convertedCrop.currencySymbol = currency;
-            return convertedCrop;  
         }
 
 

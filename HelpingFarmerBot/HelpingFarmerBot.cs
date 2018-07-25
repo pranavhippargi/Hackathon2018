@@ -65,8 +65,15 @@ namespace HelpingFarmerBot
                     }
                     else if (messagetext.Contains("price"))
                     {
-                        var message = GetPrice(messagetext, countryId);
-                        await context.SendActivity(message);
+                        try
+                        {
+                            var message = GetPrice(messagetext, countryId);
+                            await context.SendActivity(message);
+                        } catch (Exception e)
+                        {
+                            await context.SendActivity(e.Message);
+                        }
+
                     }
                     else
                     {
@@ -124,19 +131,21 @@ namespace HelpingFarmerBot
 
         private string GetPrice(string messagetext, string countryId)
         {
-            var defaultMessage = "Commodity price not found. Try - Price: 'Wheat'.";
+            var reply = $"Commodity price not found. Try {CropExtensions.PrintAllCrops()}";
             if (string.IsNullOrEmpty(messagetext))
             {
-                return defaultMessage;
+                return reply;
             }
 
             var list = messagetext.Split(":");
-            var cropName = list[1].Replace("[","").Replace("]","").Trim();
-            CropInfo info = infoReader.GetCropInfo(cropName, countryId);
-            var reply = info.toString();
-
+            if (list.Length > 1)
+            {
+                var cropName = list[1].Replace("[", "").Replace("]", "").Trim();
+                CropInfo info = infoReader.GetCropInfo(cropName, countryId);
+                reply = info.toString();
+            }
+            
             return reply;
-
         }
 
         public string HttpGet(string URI)
