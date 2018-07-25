@@ -48,7 +48,7 @@ namespace HelpingFarmerBot
                             var minTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_min"]);
                             var maxTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_max"]);
 
-                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {temperature} C ; Min Temp: {minTemperature} C; Max Temp: {maxTemperature}");
+                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {temperature} C ; Min Temp: {minTemperature} C; Max Temp: {maxTemperature} C");
                         }
                         catch (Exception e)
                         {
