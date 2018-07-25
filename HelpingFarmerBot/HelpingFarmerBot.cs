@@ -16,7 +16,7 @@ namespace HelpingFarmerBot
 {
     public class HelpingFarmerBot : IBot
     {
-        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and local weather forecasts. Try following options. \n Price: 'Crop' \n Weather: 'City'";
+        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and temperature. Try following options. \n Price: 'Crop' \n Weather: 'City'";
         /// <summary>
         /// Every Conversation turn for our HelpingFarmerBot will call this method. In here
         /// the bot checks the Activty type to verify it's a message, bumps the 
