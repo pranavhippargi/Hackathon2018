@@ -8,8 +8,8 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.TraceExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.Bot.Builder.Ai.Translation;
+using Microsoft.Extensions.Logging;
 
 namespace HelpingFarmerBot
 {

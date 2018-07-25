@@ -7,16 +7,20 @@ using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
-using SimpleEchoBot.FarmingInfo;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Twilio;
+using System.Collections.Generic;
+using Twilio.Rest.Lookups.V1;
 
 namespace HelpingFarmerBot
 {
     public class HelpingFarmerBot : IBot
     {
-        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and temperature. Try following options. \n Price: 'Crop' \n Weather: 'City'";
+        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and local temperature. Try following options. \n Price: 'Crop' \n Weather: 'City'";
+        CropInfoReader infoReader = new CropInfoReader();
+
         /// <summary>
         /// Every Conversation turn for our HelpingFarmerBot will call this method. In here
         /// the bot checks the Activty type to verify it's a message, bumps the 
@@ -31,6 +35,9 @@ namespace HelpingFarmerBot
             {
                 case ActivityTypes.Message:
                     var messagetext = context.Activity.Text.Trim().ToLower();
+                    var countryId = GetCountry(context.Activity.From.Id);
+
+                    await context.SendActivity(countryId);
 
                     if (messagetext.ToLowerInvariant().Contains("weather"))
                     {
@@ -57,7 +64,7 @@ namespace HelpingFarmerBot
                     }
                     else if (messagetext.Contains("price"))
                     {
-                        var message = GetPrice(messagetext);
+                        var message = GetPrice(messagetext, countryId);
                         await context.SendActivity(message);
                     }
                     else
@@ -78,13 +85,35 @@ namespace HelpingFarmerBot
 
         }
 
+        private string GetCountry(string number)
+        {
+            const string accountSid = "AC1061e132398b5dc01334d9ff9b63d58a";
+            const string authToken = "9e6a04f6a51ef7d32858ac16f83c2727";
+
+            TwilioClient.Init(accountSid, authToken);
+
+            var type = new List<string> {
+                "carrier"
+            };
+
+
+            var phoneNumber = PhoneNumberResource.Fetch(
+                type: type,
+                pathPhoneNumber: new Twilio.Types.PhoneNumber(number)
+
+            );
+
+            return phoneNumber.CountryCode;
+        }
+
+
         private string ConvertKelvinToCelcius(string kelvin)
         {
             var tempInKelvin = Convert.ToDouble(kelvin);
             return (tempInKelvin - 273.15).ToString();
         }
 
-        private string GetPrice(string messagetext)
+        private string GetPrice(string messagetext, string countryId)
         {
             var defaultMessage = "Commodity price not found. Try - Price: 'Wheat'.";
             if (string.IsNullOrEmpty(messagetext))
@@ -93,15 +122,11 @@ namespace HelpingFarmerBot
             }
 
             var list = messagetext.Split(":");
-            var produce = list[1].Replace("[","").Replace("]","").Trim();
+            var cropName = list[1].Replace("[","").Replace("]","").Trim();
+            CropInfo info = infoReader.GetCropInfo(cropName, countryId);
+            var reply = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
 
-            CropInfoReader infoReader = new CropInfoReader();
-
-            var crop = (Crop)Int32.Parse("1");
-            CropInfo info = infoReader.GetCropInfo(crop);
-            var logMessage = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
-
-            return logMessage;
+            return reply;
 
         }
 

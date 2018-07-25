@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleEchoBot.FarmingInfo
+namespace HelpingFarmerBot
 {
     public struct CropInfo
     {
