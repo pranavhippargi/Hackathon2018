@@ -51,17 +51,18 @@ namespace HelpingFarmerBot
                             var weatherJsonMsg = this.HttpGet(newUrl);
                             var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
 
-                            var temperature = weatherData.Main["temp"];
+                            var temperature = ConvertKelvinToCelcius(weatherData.Main["temp"]);
+                            var minTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_min"]);
+                            var maxTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_max"]);
 
-                            await context.SendActivity($"Temp:{temperature}");
+                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {temperature} C ; Min Temp: {minTemperature} C; Max Temp: {maxTemperature} C");
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine(e.StackTrace);
                         }
                     }
-
-                    if (messagetext.Contains("price"))
+                    else if (messagetext.Contains("price"))
                     {
                         var message = GetPrice(messagetext, countryId);
                         await context.SendActivity(message);
@@ -103,6 +104,13 @@ namespace HelpingFarmerBot
             );
 
             return phoneNumber.CountryCode;
+        }
+
+
+        private string ConvertKelvinToCelcius(string kelvin)
+        {
+            var tempInKelvin = Convert.ToDouble(kelvin);
+            return (tempInKelvin - 273.15).ToString();
         }
 
         private string GetPrice(string messagetext, string countryId)
