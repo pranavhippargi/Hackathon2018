@@ -37,16 +37,14 @@ namespace HelpingFarmerBot
                     var messagetext = context.Activity.Text.Trim().ToLower();
                     var countryId = GetCountry(context.Activity.From.Id);
 
-                    await context.SendActivity(countryId);
-
                     if (messagetext.ToLowerInvariant().Contains("weather"))
                     {
                         var city = messagetext.Split(':')[1].Trim();
 
                         try
                         {
-                            var apiKey = "d0350e61d7e88eac4874c96c578cb95b";
-                            var newUrl = $"http://api.openweathermap.org/data/2.5/weather?q={city},uk&APPID={apiKey}";
+                            var apiKey = "c38e770a1da2d9c102a1e4a5ae98f0d1";
+                            var newUrl = $"http://api.openweathermap.org/data/2.5/weather?appid={apiKey}&q={city}";
 
                             var weatherJsonMsg = this.HttpGet(newUrl);
                             var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
@@ -97,13 +95,21 @@ namespace HelpingFarmerBot
             };
 
 
-            var phoneNumber = PhoneNumberResource.Fetch(
-                type: type,
-                pathPhoneNumber: new Twilio.Types.PhoneNumber(number)
+            try
+            {
+                var phoneNumber = PhoneNumberResource.Fetch(
+                    type: type,
+                    pathPhoneNumber: new Twilio.Types.PhoneNumber(number)
 
-            );
+                );
 
-            return phoneNumber.CountryCode;
+                return phoneNumber.CountryCode;
+            }
+            catch (System.Exception)
+            {
+                // return default country code if number not found
+                return "US";
+            }
         }
 
 
@@ -124,7 +130,7 @@ namespace HelpingFarmerBot
             var list = messagetext.Split(":");
             var cropName = list[1].Replace("[","").Replace("]","").Trim();
             CropInfo info = infoReader.GetCropInfo(cropName, countryId);
-            var reply = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
+            var reply = info.toString();
 
             return reply;
 
