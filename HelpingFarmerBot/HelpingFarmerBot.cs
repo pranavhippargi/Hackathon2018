@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+
 using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
 using SimpleEchoBot.FarmingInfo;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HelpingFarmerBot
 {
@@ -25,14 +31,33 @@ namespace HelpingFarmerBot
             {
                 case ActivityTypes.Message:
                     var messagetext = context.Activity.Text.Trim().ToLower();
+
+                    if (messagetext.ToLowerInvariant().Contains("weather"))
+                    {
+                        var city = messagetext.Split(':')[1].Trim();
+
+                        try
+                        {
+                            var apiKey = "d0350e61d7e88eac4874c96c578cb95b";
+                            var newUrl = $"http://api.openweathermap.org/data/2.5/weather?q={city},uk&APPID={apiKey}";
+
+                            var weatherJsonMsg = this.HttpGet(newUrl);
+                            var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
+
+                            var temperature = weatherData.Main["temp"];
+
+                            await context.SendActivity($"Temp:{temperature}");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                        }
+                    }
+
                     if (messagetext.Contains("price"))
                     {
                         var message = GetPrice(messagetext);
                         await context.SendActivity(message);
-                    }
-                    else if(messagetext.Contains("weather"))
-                    {
-                        await context.SendActivity($"Tomorrow weather in London is rainy.");
                     }
                     else
                     {
@@ -71,6 +96,24 @@ namespace HelpingFarmerBot
 
             return logMessage;
 
+        }
+
+        public string HttpGet(string URI)
+        {
+            WebClient client = new WebClient();
+
+            // Add a user agent header in case the 
+            // requested URI contains a query.
+
+            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
+            Stream data = client.OpenRead(URI);
+            StreamReader reader = new StreamReader(data);
+            string s = reader.ReadToEnd();
+            data.Close();
+            reader.Close();
+
+            return s;
         }
     }
 }
