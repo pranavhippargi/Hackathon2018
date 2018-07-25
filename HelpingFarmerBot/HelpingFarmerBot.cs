@@ -124,7 +124,7 @@ namespace HelpingFarmerBot
             var list = messagetext.Split(":");
             var cropName = list[1].Replace("[","").Replace("]","").Trim();
             CropInfo info = infoReader.GetCropInfo(cropName, countryId);
-            var reply = $"{info.name} price today - low: {info.lowPrice} average: {info.avgPrice} high: {info.highPrice}";
+            var reply = info.toString();
 
             return reply;
 

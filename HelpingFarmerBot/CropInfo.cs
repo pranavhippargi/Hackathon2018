@@ -2,13 +2,20 @@
 
 namespace HelpingFarmerBot
 {
-    public struct CropInfo
+    public class CropInfo
     {
         public string name;
         public float lowPrice;
         public float avgPrice;
         public float highPrice;
         public DateTime date;
+        public string commodityUnit;
+        public string currencySymbol;
+
+        public string toString() 
+        {
+            return $"{this.name} price today - low: {this.currencySymbol}{this.lowPrice} per {this.commodityUnit} average: {this.currencySymbol}{this.avgPrice} per {this.commodityUnit} high: {this.currencySymbol}{this.highPrice} per {this.commodityUnit}";
+        }
     }
 
     public enum Crop
