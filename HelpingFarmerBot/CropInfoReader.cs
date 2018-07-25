@@ -9,11 +9,10 @@ using Newtonsoft.Json;
 using HtmlAgilityPack;
 using System.Net;
 
-namespace SimpleEchoBot.FarmingInfo
+namespace HelpingFarmerBot
 {
     public class CropInfoReader
     {
-       
         private static string CropPricesJson = Path.Combine(Environment.CurrentDirectory, @"Data\", "output.json");
         private static string CountryCurrencyIdJson = Path.Combine(Environment.CurrentDirectory, @"Data\", "countries.json");
 
