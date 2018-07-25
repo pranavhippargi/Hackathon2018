@@ -37,8 +37,6 @@ namespace HelpingFarmerBot
                     var messagetext = context.Activity.Text.Trim().ToLower();
                     var countryId = GetCountry(context.Activity.From.Id);
 
-                    await context.SendActivity(countryId);
-
                     if (messagetext.ToLowerInvariant().Contains("weather"))
                     {
                         var city = messagetext.Split(':')[1].Trim();
