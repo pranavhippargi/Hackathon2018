@@ -10,6 +10,7 @@ namespace HelpingFarmerBot
 {
     public class HelpingFarmerBot : IBot
     {
+        private static string HelpMessage = $"Welcome to Infarmation. \nDiscover global crop prices and local weather forecasts. Try following options. \n Price: 'Crop' \n Weather: 'City'";
         /// <summary>
         /// Every Conversation turn for our HelpingFarmerBot will call this method. In here
         /// the bot checks the Activty type to verify it's a message, bumps the 
@@ -35,7 +36,7 @@ namespace HelpingFarmerBot
                     }
                     else
                     {
-                        await context.SendActivity($"Welcome to Farmocratize. \nDiscover global crop prices and local weather forecasts. Try following options. \n Price: 'Crop' \n Weather: 'City'");
+                        await context.SendActivity(HelpMessage);
                     }
                     break;
                 case ActivityTypes.ConversationUpdate:
@@ -43,7 +44,7 @@ namespace HelpingFarmerBot
                     {
                         if (newMember.Id != context.Activity.Recipient.Id)
                         {
-                            await context.SendActivity("Hello and welcome to the echo bot.");
+                            await context.SendActivity(HelpMessage);
                         }
                     }
                     break;
