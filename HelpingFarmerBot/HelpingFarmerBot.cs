@@ -4,7 +4,6 @@ using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
-using SimpleEchoBot.FarmingInfo;
 
 namespace HelpingFarmerBot
 {
