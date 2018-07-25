@@ -6,7 +6,6 @@ using System.Web;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using HtmlAgilityPack;
 using System.Net;
 
 namespace HelpingFarmerBot
