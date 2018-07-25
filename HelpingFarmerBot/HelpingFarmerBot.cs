@@ -44,9 +44,11 @@ namespace HelpingFarmerBot
                             var weatherJsonMsg = this.HttpGet(newUrl);
                             var weatherData = JsonConvert.DeserializeObject<WeatherData>(weatherJsonMsg);
 
-                            var temperature = weatherData.Main["temp"];
+                            var temperature = ConvertKelvinToCelcius(weatherData.Main["temp"]);
+                            var minTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_min"]);
+                            var maxTemperature = ConvertKelvinToCelcius(weatherData.Main["temp_max"]);
 
-                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {ConvertKelvinToCelcius(temperature)} C.");
+                            await context.SendActivity($"Temperature in {city.ToUpperInvariant()} is : {temperature} C ; Min Temp: {minTemperature} C; Max Temp: {maxTemperature}");
                         }
                         catch (Exception e)
                         {
