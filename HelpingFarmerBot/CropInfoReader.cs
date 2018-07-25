@@ -7,11 +7,10 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace SimpleEchoBot.FarmingInfo
+namespace HelpingFarmerBot
 {
     public class CropInfoReader
     {
-       
         private static string CropPricesJson = Path.Combine(Environment.CurrentDirectory, @"Data\", "output.json");
 
         private Dictionary<string, CropInfo> crops = null;

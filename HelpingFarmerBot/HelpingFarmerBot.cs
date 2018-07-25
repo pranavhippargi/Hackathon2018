@@ -8,10 +8,10 @@ using SimpleEchoBot.FarmingInfo;
 
 namespace HelpingFarmerBot
 {
-    public class EchoBot : IBot
+    public class HelpingFarmerBot : IBot
     {
         /// <summary>
-        /// Every Conversation turn for our EchoBot will call this method. In here
+        /// Every Conversation turn for our HelpingFarmerBot will call this method. In here
         /// the bot checks the Activty type to verify it's a message, bumps the 
         /// turn conversation 'Turn' count, and then echoes the users typing
         /// back to them. 

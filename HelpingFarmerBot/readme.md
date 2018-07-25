@@ -1,2 +1,2 @@
-﻿# EchoBot hosted in ASP.NET Core
-This sample shows how to integrate a simple EchoBot bot with ASP.Net Core 2. 
+﻿# HelpingFarmerBot hosted in ASP.NET Core
+This sample shows how to integrate a simple HelpingFarmerBot bot with ASP.Net Core 2. 

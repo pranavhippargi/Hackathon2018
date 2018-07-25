@@ -41,7 +41,7 @@ namespace HelpingFarmerBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBot<EchoBot>(options =>
+            services.AddBot<HelpingFarmerBot>(options =>
             {
                 options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
 
@@ -52,7 +52,7 @@ namespace HelpingFarmerBot
                 // an "Ooops" message is sent. 
                 options.Middleware.Add(new CatchExceptionMiddleware<Exception>(async (context, exception) =>
                 {
-                    await context.TraceActivity("EchoBot Exception", exception);
+                    await context.TraceActivity("HelpingFarmerBot Exception", exception);
                     await context.SendActivity("Sorry, it looks like something went wrong!");
                 }));
 
@@ -73,7 +73,7 @@ namespace HelpingFarmerBot
                 // IStorage dataStore = new Microsoft.Bot.Builder.Azure.AzureTableStorage("AzureTablesConnectionString", "TableName");
                 // IStorage dataStore = new Microsoft.Bot.Builder.Azure.AzureBlobStorage("AzureBlobConnectionString", "containerName");
 
-                options.Middleware.Add(new ConversationState<EchoState>(dataStore));
+                options.Middleware.Add(new ConversationState<HelpingFarmerState>(dataStore));
 
                 // Add translation middleware
                 // The first parameter is a list of languages the bot recognizes
