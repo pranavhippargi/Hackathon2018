@@ -73,9 +73,9 @@ namespace HelpingFarmerBot
                     {
                         CountryInfo countryInfo;
                         var info = country.First;
-                        countryInfo.currencyId = info["currencyId"];
-                        countryInfo.currencySymbol = info["currencySymbol"];
-                        countryInfo.countryName = info["name"];
+                        countryInfo.currencyId = info["currencyId"].ToString();
+                        countryInfo.currencySymbol = info["currencySymbol"].ToString();
+                        countryInfo.countryName = info["name"].ToString();
                         countryInfos.Add(info["id"].ToString(), countryInfo);
                     }
                 }
@@ -95,7 +95,7 @@ namespace HelpingFarmerBot
                     {
                         foreach (var item in info)
                         {
-                            CropInfo crop;
+                            CropInfo crop = new CropInfo();
                             crop.name = item["shortName"].ToString();
                             if (item["price"] != null && item["highPrice"] != null && item["lowPrice"] != null && item["priceDate"] != null)
                             {
@@ -103,7 +103,7 @@ namespace HelpingFarmerBot
                                 crop.lowPrice = float.Parse(item["lowPrice"].ToString());
                                 crop.highPrice = float.Parse(item["highPrice"].ToString());
                                 crop.date = DateTime.Parse(item["priceDate"].ToString());
-                                var unit = item["commodityUnits"].Split("/");
+                                var unit = item["commodityUnits"].ToString().Split("/");
                                 crop.commodityUnit = unit[unit.Length - 1];
                                 crops.Add(crop.name.ToLower(), crop);
                             }
