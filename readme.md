@@ -1,5 +1,7 @@
-Welcome to Infarmation. This is a Microsoft Echo Bot Implementation to help farmers gather information using SMS.
+Welcome to CropCast. This is a Microsoft Echo Bot Implementation to help farmers gather information using SMS.
 
 Discover global crop prices and local weather forecasts. 
 Try following options. 
-Price: 'Crop' Weather: 'City'
+Price: <Crop_Name>
+OR
+Weather:<City_Name>
