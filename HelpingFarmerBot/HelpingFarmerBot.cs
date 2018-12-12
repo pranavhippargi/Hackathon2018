@@ -74,8 +74,8 @@ namespace HelpingFarmerBot
 
         private string GetCountry(string number)
         {
-            const string accountSid = "AC1061e132398b5dc01334d9ff9b63d58a";
-            const string authToken = "9e6a04f6a51ef7d32858ac16f83c2727";
+            const string accountSid = "####";
+            const string authToken = "####";
 
             TwilioClient.Init(accountSid, authToken);
 
